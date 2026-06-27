@@ -1,0 +1,83 @@
+# Milvus Standalone (production-style) for the Meditech advanced platform.
+#
+#   docker compose -f rag/milvus-compose.yml up -d
+#
+# Pinned to the Milvus 2.6 line to match the pymilvus 3.0 client. Bump with:
+#   set MILVUS_VERSION=v2.6.11   (Windows)   then re-run up -d
+#
+# KEY ISOLATION CHOICE: Milvus needs its OWN etcd + MinIO. We do NOT publish
+# their host ports, so they can never collide with the lab's MinIO (9000/9001)
+# or anything else. Only Milvus's client port (19530) and health port (9091)
+# are exposed. Everything else talks over the private `milvus_net` network.
+
+services:
+  milvus-etcd:
+    container_name: milvus-etcd
+    image: quay.io/coreos/etcd:v3.5.18
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - milvus_etcd:/etcd
+    command: etcd -advertise-client-urls=http://milvus-etcd:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks: [milvus_net]
+
+  milvus-minio:
+    container_name: milvus-minio
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    command: minio server /minio_data --console-address ":9001"
+    volumes:
+      - milvus_minio:/minio_data
+    # NOTE: deliberately NO `ports:` mapping — internal only, no clash with the lab MinIO.
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks: [milvus_net]
+
+  milvus-standalone:
+    container_name: milvus-standalone
+    image: milvusdb/milvus:${MILVUS_VERSION:-v2.6.11}
+    command: ["milvus", "run", "standalone"]
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      ETCD_ENDPOINTS: milvus-etcd:2379
+      MINIO_ADDRESS: milvus-minio:9000
+    volumes:
+      - milvus_data:/var/lib/milvus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+      start_period: 90s
+    ports:
+      - "19530:19530"   # gRPC client port (pymilvus connects here)
+      - "9091:9091"     # health / metrics
+    depends_on:
+      milvus-etcd:
+        condition: service_healthy
+      milvus-minio:
+        condition: service_healthy
+    networks: [milvus_net]
+
+networks:
+  milvus_net:
+    driver: bridge
+
+volumes:
+  milvus_etcd:
+  milvus_minio:
+  milvus_data:

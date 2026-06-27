@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bangalore City Hospital — Clinical Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <div>
+      <h1>Bangalore City Hospital</h1>
+      <small>CLINICAL PORTAL · UE26MT324 · RBAC + HYBRID RAG</small>
+    </div>
+  </div>
+  <div id="whoami" class="hidden">
+    <span id="who-text"></span>
+    <button id="logout-btn" onclick="logout()">Log out</button>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<main id="login-view">
+  <video class="bg-video" autoplay loop muted playsinline preload="auto" aria-hidden="true">
+    <source src="/heart-bg.mp4" type="video/mp4">
+  </video>
+  <div class="video-dim" aria-hidden="true"></div>
+  <div class="heart-bg" aria-hidden="true">
+    <svg class="heart-svg" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="heartBody" cx="38%" cy="30%" r="80%">
+          <stop offset="0%" stop-color="#e6ffce" stop-opacity="0.95"/>
+          <stop offset="45%" stop-color="#9fd97f" stop-opacity="0.62"/>
+          <stop offset="100%" stop-color="#14322a" stop-opacity="0.55"/>
+        </radialGradient>
+        <radialGradient id="heartVessel" cx="40%" cy="30%" r="80%">
+          <stop offset="0%" stop-color="#dbf7bd" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#3a6b4a" stop-opacity="0.6"/>
+        </radialGradient>
+      </defs>
+      <g class="heart-beat" stroke="#cef79e" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M106,92 C106,54 99,30 83,26 C71,23 62,31 62,42" fill="none" stroke="url(#heartVessel)" stroke-width="13"/>
+        <path d="M83,26 C83,18 90,16 95,20" fill="none" stroke="url(#heartVessel)" stroke-width="6"/>
+        <path d="M73,24 C73,16 79,14 84,18" fill="none" stroke="url(#heartVessel)" stroke-width="6"/>
+        <path d="M124,92 C130,58 127,40 116,32" fill="none" stroke="url(#heartVessel)" stroke-width="12"/>
+        <path d="M144,96 C154,74 153,54 148,44" fill="none" stroke="url(#heartVessel)" stroke-width="9"/>
+        <path d="M66,88 C44,94 36,120 44,150 C52,184 68,210 86,230 C89,233 94,233 97,228 C132,202 158,172 162,136 C166,106 158,86 134,82 C118,79 106,86 99,95 C88,84 78,84 66,88 Z" fill="url(#heartBody)" stroke-width="1.5"/>
+        <path d="M66,92 C52,86 44,92 49,104 C55,112 64,108 70,100 Z" fill="url(#heartBody)" stroke-width="1.3"/>
+        <path d="M110,98 C103,134 95,184 90,224" fill="none" stroke-width="2.4" stroke-opacity="0.75"/>
+        <path d="M104,140 C112,146 120,150 126,150" fill="none" stroke-width="1.4" stroke-opacity="0.55"/>
+        <path d="M98,180 C106,186 112,190 118,190" fill="none" stroke-width="1.4" stroke-opacity="0.5"/>
+        <path d="M60,120 C96,140 130,138 152,122" fill="none" stroke-width="2" stroke-opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+  <div class="ecg-bg" aria-hidden="true">
+    <svg class="ecg-svg" viewBox="0 0 4800 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <path class="ecg-path" d="M 0,100 L 35,100 L 48,88 L 61,100 L 92,100 L 101,108 L 110,28 L 122,162 L 132,100 L 165,100 L 185,82 L 205,100 L 300,100 L 300,100 L 335,100 L 348,88 L 361,100 L 392,100 L 401,108 L 410,28 L 422,162 L 432,100 L 465,100 L 485,82 L 505,100 L 600,100 L 600,100 L 635,100 L 648,88 L 661,100 L 692,100 L 701,108 L 710,28 L 722,162 L 732,100 L 765,100 L 785,82 L 805,100 L 900,100 L 900,100 L 935,100 L 948,88 L 961,100 L 992,100 L 1001,108 L 1010,28 L 1022,162 L 1032,100 L 1065,100 L 1085,82 L 1105,100 L 1200,100 L 1200,100 L 1235,100 L 1248,88 L 1261,100 L 1292,100 L 1301,108 L 1310,28 L 1322,162 L 1332,100 L 1365,100 L 1385,82 L 1405,100 L 1500,100 L 1500,100 L 1535,100 L 1548,88 L 1561,100 L 1592,100 L 1601,108 L 1610,28 L 1622,162 L 1632,100 L 1665,100 L 1685,82 L 1705,100 L 1800,100 L 1800,100 L 1835,100 L 1848,88 L 1861,100 L 1892,100 L 1901,108 L 1910,28 L 1922,162 L 1932,100 L 1965,100 L 1985,82 L 2005,100 L 2100,100 L 2100,100 L 2135,100 L 2148,88 L 2161,100 L 2192,100 L 2201,108 L 2210,28 L 2222,162 L 2232,100 L 2265,100 L 2285,82 L 2305,100 L 2400,100 L 2400,100 L 2435,100 L 2448,88 L 2461,100 L 2492,100 L 2501,108 L 2510,28 L 2522,162 L 2532,100 L 2565,100 L 2585,82 L 2605,100 L 2700,100 L 2700,100 L 2735,100 L 2748,88 L 2761,100 L 2792,100 L 2801,108 L 2810,28 L 2822,162 L 2832,100 L 2865,100 L 2885,82 L 2905,100 L 3000,100 L 3000,100 L 3035,100 L 3048,88 L 3061,100 L 3092,100 L 3101,108 L 3110,28 L 3122,162 L 3132,100 L 3165,100 L 3185,82 L 3205,100 L 3300,100 L 3300,100 L 3335,100 L 3348,88 L 3361,100 L 3392,100 L 3401,108 L 3410,28 L 3422,162 L 3432,100 L 3465,100 L 3485,82 L 3505,100 L 3600,100 L 3600,100 L 3635,100 L 3648,88 L 3661,100 L 3692,100 L 3701,108 L 3710,28 L 3722,162 L 3732,100 L 3765,100 L 3785,82 L 3805,100 L 3900,100 L 3900,100 L 3935,100 L 3948,88 L 3961,100 L 3992,100 L 4001,108 L 4010,28 L 4022,162 L 4032,100 L 4065,100 L 4085,82 L 4105,100 L 4200,100 L 4200,100 L 4235,100 L 4248,88 L 4261,100 L 4292,100 L 4301,108 L 4310,28 L 4322,162 L 4332,100 L 4365,100 L 4385,82 L 4405,100 L 4500,100 L 4500,100 L 4535,100 L 4548,88 L 4561,100 L 4592,100 L 4601,108 L 4610,28 L 4622,162 L 4632,100 L 4665,100 L 4685,82 L 4705,100 L 4800,100" fill="none" stroke="#cef79e" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <div class="ecg-fade"></div>
+  </div>
+  <div class="card login-card">
+    <div class="login-eyebrow">SECURE ACCESS</div>
+    <h2>Sign in.</h2>
+    <p class="muted">Separate credentials for Admin, Doctor and Patient.</p>
+    <input id="u" placeholder="Username" autocomplete="username">
+    <input id="p" type="password" placeholder="Password" autocomplete="current-password">
+    <button class="primary" onclick="login()">Sign in</button>
+    <div id="login-err" class="err"></div>
+    <div class="seed muted">
+      <b>DEMO LOGINS</b><br>
+      admin / admin123 · dr.sharma / doctor123 · rajan / patient123
+    </div>
+  </div>
+</main>
+
+<!-- ADMIN -->
+<main id="admin-view" class="hidden grid2">
+  <div class="card">
+    <h2>Enroll a user</h2>
+    <input id="e-username" placeholder="Username">
+    <input id="e-fullname" placeholder="Full name">
+    <input id="e-password" type="password" placeholder="Password">
+    <select id="e-role" onchange="toggleLinked()">
+      <option value="doctor">doctor</option>
+      <option value="patient">patient</option>
+      <option value="admin">admin</option>
+    </select>
+    <input id="e-linked" class="hidden" placeholder="Linked patient_id (e.g. PT-002)">
+    <button class="primary" onclick="enroll()">Enroll</button>
+    <div id="enroll-msg" class="msg"></div>
+  </div>
+  <div class="card">
+    <h2>Users</h2>
+    <div id="user-list" class="list"></div>
+  </div>
+  <div class="card span2">
+    <h2>Audit log <button class="ghost" onclick="loadAudit()">↻ Refresh</button></h2>
+    <div id="audit-list" class="list mono"></div>
+  </div>
+</main>
+
+<!-- DOCTOR -->
+<main id="doctor-view" class="hidden grid2">
+  <div class="card">
+    <h2>Patients</h2>
+    <div id="doc-patients" class="list"></div>
+  </div>
+  <div class="card">
+    <h2>Patient detail</h2>
+    <div id="doc-detail" class="muted">Select a patient.</div>
+  </div>
+  <div class="card span2">
+    <h2>Clinical Q&amp;A <span class="muted">(hybrid RAG · Llama 3.1 8B)</span></h2>
+    <select id="doc-scope"><option value="">All patients + guidelines</option></select>
+    <input id="doc-q" placeholder="e.g. What's the management for this patient's heart failure?">
+    <button class="primary" onclick="ask('doctor')">Ask</button>
+    <div id="doc-answer" class="answer"></div>
+  </div>
+  <div class="card span2" id="doc-risk-card">
+    <h2>Familial Risk Calculator <span class="muted">(family-history genetics)</span></h2>
+    <div id="doc-risk" class="risk-panel"></div>
+  </div>
+</main>
+
+<!-- PATIENT -->
+<main id="patient-view" class="hidden grid2">
+  <div class="card span2">
+    <h2>My health record</h2>
+    <div id="pt-record" class="muted">Loading…</div>
+  </div>
+  <div class="card span2">
+    <h2>Ask about my health <span class="muted">(hybrid RAG · Llama 3.1 8B)</span></h2>
+    <input id="pt-q" placeholder="e.g. What do my latest results mean?">
+    <button class="primary" onclick="ask('patient')">Ask</button>
+    <div id="pt-answer" class="answer"></div>
+  </div>
+  <div class="card span2" id="pt-risk-card">
+    <h2>My Familial Risk <span class="muted">(family-history genetics)</span></h2>
+    <div id="pt-risk" class="risk-panel"></div>
+  </div>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

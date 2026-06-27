@@ -1,0 +1,39 @@
+# ── Python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Virtual environments ────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Local app state / secrets ───────────────────────────
+meditech_users.json
+*.env
+.env
+.env.*
+secrets.*
+
+# ── Data / volumes / dumps ──────────────────────────────
+*.dump
+*.sqlite
+*.db
+pgdata/
+es_data/
+minio_data/
+milvus_data/
+
+# ── OS / editor ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ── Logs ────────────────────────────────────────────────
+*.log

@@ -1,0 +1,281 @@
+/* Bangalore City Hospital — Clinical Portal
+   Visual language: "bioluminescent laboratory at midnight"
+   Abyssal-ink canvas · single lime accent · Aspekta(InterTight)+RobotoMono · hairlines, flat */
+
+:root{
+  --abyssal:#222f30; --abyssal-2:#26343500;
+  --panel:#283638; --panel-2:#1c2728;
+  --paper:#ffffff; --bone:#f7f7f5;
+  --graphite:#4d5757; --lichen:#c9cbbe; --tissue:#e7e8e1;
+  --lime:#cef79e; --void:#000000;
+  --hair:#3a4748;            /* hairline on dark, slightly lifted from graphite */
+  --red:#e06a5b; --blue:#8fb7d6; --amber:#d6b56a;
+
+  --sans:'Inter Tight', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  font-family:var(--sans); font-weight:400;
+  background:var(--abyssal); color:var(--paper);
+  font-size:16px; line-height:1.4; letter-spacing:-0.01em;
+  min-height:100vh;
+}
+.hidden{display:none!important}
+
+/* ── typographic helpers ───────────────────────────────────────── */
+.muted{color:var(--lichen); font-size:13px; letter-spacing:-0.01em}
+.mono{font-family:var(--mono); font-size:12.5px; letter-spacing:-0.02em; color:var(--lichen)}
+
+/* ── header ────────────────────────────────────────────────────── */
+header{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 40px; border-bottom:1px solid var(--hair);
+  position:sticky; top:0; background:rgba(34,47,48,.85);
+  backdrop-filter:saturate(140%) blur(12px); z-index:50;
+}
+.brand{display:flex; align-items:center; gap:14px}
+.brand-mark{width:10px; height:10px; border-radius:2px; background:var(--lime);
+  box-shadow:0 0 14px rgba(206,247,158,.6); flex:none}
+header h1{font-family:var(--sans); font-weight:400; font-size:21px; letter-spacing:-0.03em; color:var(--paper)}
+header small{font-family:var(--mono); font-size:11px; letter-spacing:0.02em; color:var(--graphite); text-transform:uppercase}
+#whoami{display:flex; gap:16px; align-items:center; font-family:var(--mono); font-size:12.5px; color:var(--lichen)}
+
+/* ── layout ────────────────────────────────────────────────────── */
+main{padding:40px; max-width:1200px; margin:0 auto}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+.span2{grid-column:1 / -1}
+
+/* ── cards ─────────────────────────────────────────────────────── */
+.card{
+  background:var(--panel-2); border:1px solid var(--hair);
+  border-radius:20px; padding:28px;
+}
+.card h2{
+  font-family:var(--sans); font-weight:400; font-size:24px; letter-spacing:-0.02em;
+  color:var(--paper); margin-bottom:18px; display:flex; align-items:center; gap:10px;
+}
+.card h2::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--lime);
+  box-shadow:0 0 10px rgba(206,247,158,.7); flex:none}
+.card h2 .muted{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0; color:var(--graphite)}
+
+/* ── login (hero feel) ─────────────────────────────────────────── */
+#login-view{display:flex; justify-content:center; align-items:flex-start; padding-top:90px;
+  position:relative; overflow:hidden; min-height:calc(100vh - 70px)}
+
+/* full-screen background video (with SVG heart/ECG as fallback behind it) */
+.bg-video{position:fixed; inset:0; width:100vw; height:100vh; object-fit:cover;
+  z-index:0; pointer-events:none; background:var(--abyssal);
+  filter:brightness(1.45) saturate(1.1)}
+.video-dim{position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(20,28,29,.12) 0%, rgba(20,28,29,.24) 100%)}
+
+/* large, faint, pseudo-3D heart beating behind everything (synced to ECG beat) */
+.heart-bg{position:absolute; inset:0; z-index:0; pointer-events:none;
+  display:flex; align-items:center; justify-content:center; opacity:.18}
+.heart-svg{width:640px; height:auto; max-width:78vw;
+  filter:drop-shadow(0 0 16px rgba(206,247,158,.3));
+  animation:heart-halo 1.75s ease-in-out infinite}
+.heart-beat{transform-box:fill-box; transform-origin:center;
+  animation:heart-beat 1.75s ease-in-out infinite}
+@keyframes heart-beat{          /* lub-dub: sharp contraction, smaller second */
+  0%{transform:scale(1)}
+  7%{transform:scale(1.085)}    /* lub */
+  15%{transform:scale(1.0)}
+  25%{transform:scale(1.05)}    /* dub */
+  34%{transform:scale(1.0)}
+  100%{transform:scale(1.0)}
+}
+@keyframes heart-halo{
+  0%,100%{filter:drop-shadow(0 0 14px rgba(206,247,158,.22))}
+  7%{filter:drop-shadow(0 0 40px rgba(206,247,158,.55))}
+}
+@media (prefers-reduced-motion:reduce){
+  .heart-beat,.heart-svg{animation:none}
+}
+
+/* animated ECG heartbeat background (pure SVG/CSS, lime on abyssal) */
+.ecg-bg{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  display:flex; align-items:center; opacity:.5}
+.ecg-svg{position:absolute; left:0; top:50%; height:300px; width:4800px;
+  transform:translateY(-50%);
+  animation:ecg-scroll 7s linear infinite}
+.ecg-path{filter:drop-shadow(0 0 5px rgba(206,247,158,.85)) drop-shadow(0 0 14px rgba(206,247,158,.4));
+  animation:ecg-glow 1.75s ease-in-out infinite}
+/* soft radial dim so the trace fades at the edges and behind the card */
+.ecg-fade{position:absolute; inset:0;
+  background:radial-gradient(ellipse 55% 70% at 50% 42%, rgba(28,39,40,.82) 0%, rgba(34,47,48,.4) 55%, transparent 100%)}
+
+@keyframes ecg-scroll{from{transform:translate(0,-50%)} to{transform:translate(-300px,-50%)}}
+@keyframes ecg-glow{
+  0%,100%{opacity:.55}
+  6%{opacity:1}            /* the "illuminate" flash per beat */
+  18%{opacity:.7}
+  50%{opacity:.55}
+}
+@media (prefers-reduced-motion:reduce){
+  .ecg-svg{animation:none} .ecg-path{animation:none}
+}
+
+.login-card{max-width:420px; width:100%; padding:40px; position:relative; z-index:2;
+  background:rgba(28,39,40,.55); backdrop-filter:blur(14px) saturate(120%);
+  -webkit-backdrop-filter:blur(14px) saturate(120%); border-color:rgba(206,247,158,.18)}
+.login-card h2{font-size:58px; letter-spacing:-0.04em; line-height:1; margin:6px 0 14px}
+.login-card h2::before{display:none}
+.login-eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:0.08em; color:var(--lime); text-transform:uppercase}
+.seed{margin-top:22px; padding-top:18px; border-top:1px solid var(--hair); line-height:1.9;
+  font-family:var(--mono); font-size:12px; color:var(--graphite)}
+.seed b{color:var(--lichen); letter-spacing:0.06em}
+
+/* ── form fields ───────────────────────────────────────────────── */
+input,select,textarea{
+  width:100%; font-family:var(--sans); font-size:15px; color:var(--paper);
+  background:var(--panel-2); border:1px solid var(--hair); border-radius:8px;
+  padding:12px 14px; margin-bottom:12px; letter-spacing:-0.01em; transition:border-color .15s, box-shadow .15s;
+}
+input::placeholder,textarea::placeholder{color:var(--graphite)}
+input:focus,select:focus,textarea:focus{
+  outline:none; border-color:var(--lime); box-shadow:0 0 0 3px rgba(206,247,158,.12);
+}
+textarea{resize:vertical; line-height:1.5}
+select{appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23c9cbbe' stroke-width='1.3' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 14px center; padding-right:34px}
+
+/* ── buttons ───────────────────────────────────────────────────── */
+button{cursor:pointer; font-family:var(--mono); font-weight:400; border:none; border-radius:8px;
+  letter-spacing:0.02em; text-transform:uppercase; transition:all .15s}
+button.primary{
+  background:var(--paper); color:var(--abyssal); width:100%;
+  padding:13px 16px; font-size:13px;
+}
+button.primary:hover{background:var(--lime)}
+button.ghost{
+  background:transparent; color:var(--lichen); border:1px solid var(--graphite);
+  padding:6px 12px; font-size:11px;
+}
+button.ghost:hover{border-color:var(--lime); color:var(--lime)}
+#logout-btn{background:transparent; color:var(--lichen); border:1px solid var(--graphite);
+  padding:7px 14px; font-size:11px}
+#logout-btn:hover{border-color:var(--lime); color:var(--lime)}
+
+/* ── messages ──────────────────────────────────────────────────── */
+.err{color:var(--red); font-family:var(--mono); font-size:12px; margin-top:8px}
+.msg{font-family:var(--mono); font-size:12px; margin-top:10px}
+.msg.ok{color:var(--lime)} .msg.err{color:var(--red)}
+
+/* ── lists & rows ──────────────────────────────────────────────── */
+.list{display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto}
+.row{background:var(--panel-2); border:1px solid var(--hair); border-radius:12px;
+  padding:12px 14px; font-size:14px; transition:border-color .15s, background .15s}
+.row.clickable{cursor:pointer}
+.row.clickable:hover{border-color:var(--lime); background:var(--panel)}
+
+/* ── tags / badges (mono pill + lime dot) ──────────────────────── */
+.tag{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono);
+  font-size:11px; text-transform:uppercase; letter-spacing:0.03em;
+  border:1px solid var(--graphite); border-radius:9999px; padding:3px 10px; color:var(--lichen)}
+.tag::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--lime); flex:none}
+.tag.admin{color:var(--red); border-color:rgba(224,106,91,.4)}
+.tag.admin::before{background:var(--red)}
+.tag.doctor{color:var(--blue); border-color:rgba(143,183,214,.4)}
+.tag.doctor::before{background:var(--blue)}
+.tag.patient{color:var(--lime); border-color:rgba(206,247,158,.4)}
+.tag.patient::before{background:var(--lime)}
+
+/* ── patient detail ────────────────────────────────────────────── */
+.pt-head{font-family:var(--sans); font-size:22px; font-weight:400; letter-spacing:-0.02em; margin-bottom:6px}
+.sub{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--graphite); margin:18px 0 8px}
+.obs-row{display:flex; flex-wrap:wrap; gap:8px}
+.obs{display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:12px;
+  background:var(--panel-2); border:1px solid var(--hair); border-radius:9999px; padding:4px 11px; color:var(--lichen)}
+.obs::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--lichen); flex:none}
+.obs.high{color:var(--red)} .obs.high::before{background:var(--red)}
+.obs.low{color:var(--blue)} .obs.low::before{background:var(--blue)}
+.obs.norm{color:var(--lime)} .obs.norm::before{background:var(--lime)}
+
+/* ── RAG answer ────────────────────────────────────────────────── */
+.answer{margin-top:16px; background:var(--panel-2); border:1px solid var(--hair);
+  border-radius:16px; padding:18px; font-size:15px; line-height:1.6; min-height:44px}
+.answer:empty{display:none}
+.ans-meta{display:flex; gap:10px; align-items:center; margin-bottom:12px; flex-wrap:wrap}
+.ans-body{white-space:normal; color:var(--paper)}
+.cites{margin-top:14px; padding-top:12px; border-top:1px solid var(--hair);
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--mono); font-size:11px}
+.cites b{text-transform:uppercase; letter-spacing:0.06em; color:var(--graphite); margin-right:4px}
+.cites span{border:1px solid var(--hair); border-radius:9999px; padding:2px 9px; color:var(--lichen)}
+
+/* ── action buttons row + outputs ──────────────────────────────── */
+.actions{margin-top:18px; display:flex; gap:8px; flex-wrap:wrap}
+.action-out{margin-top:14px; font-size:14px; line-height:1.6}
+.action-out:empty{margin:0}
+pre.fhir{background:var(--panel-2); border:1px solid var(--hair); border-radius:12px;
+  padding:14px; overflow:auto; max-height:360px; font-family:var(--mono); font-size:11.5px;
+  white-space:pre; color:var(--lichen)}
+
+/* ── documents ─────────────────────────────────────────────────── */
+.docs{margin-top:20px; border-top:1px solid var(--hair); padding-top:16px}
+.docs-head{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+.docs-head b{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--lichen)}
+.doc-actions{display:flex; gap:6px; flex-wrap:wrap}
+.doclist{display:flex; flex-direction:column; gap:6px}
+.docrow{display:flex; align-items:center; gap:10px; background:var(--panel-2);
+  border:1px solid var(--hair); border-radius:10px; padding:9px 12px; font-size:13px}
+.docrow .docname{flex:1; font-weight:400}
+.docrow .muted{font-family:var(--mono); font-size:11px}
+.docform-inner{background:var(--panel-2); border:1px solid var(--hair); border-radius:14px; padding:18px; margin-bottom:10px}
+.docform-title{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--lime); margin-bottom:12px; display:flex; align-items:center; gap:8px}
+.docform-title::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--lime)}
+.docform-or{display:flex; align-items:center; gap:10px; margin:6px 0 10px; color:var(--graphite);
+  font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.04em}
+.docform-or::before,.docform-or::after{content:""; flex:1; height:1px; background:var(--hair)}
+.docform-inner input[type=file]{padding:8px; cursor:pointer; font-family:var(--mono); font-size:12px}
+.docform-inner input[type=file]::file-selector-button{
+  background:transparent; color:var(--lichen); border:1px solid var(--graphite); border-radius:6px;
+  padding:6px 12px; margin-right:12px; font-family:var(--mono); font-size:11px; text-transform:uppercase; cursor:pointer}
+.docform-inner input[type=file]::file-selector-button:hover{border-color:var(--lime); color:var(--lime)}
+.docform-btns{display:flex; gap:8px; margin-top:6px}
+.docform-btns button.primary{flex:1}
+.docform-btns button.ghost{padding:8px 16px}
+
+/* ── familial risk ─────────────────────────────────────────────── */
+.risk-controls{display:flex; flex-direction:column; gap:12px}
+.risk-lbl{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--graphite)}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:var(--panel-2); border:1px solid var(--graphite); color:var(--lichen);
+  border-radius:9999px; padding:7px 15px; font-family:var(--mono); font-size:12px; cursor:pointer;
+  text-transform:capitalize; transition:all .15s}
+.chip:hover{border-color:var(--lime); color:var(--lime)}
+.chip.on{background:var(--lime); border-color:var(--lime); color:var(--abyssal)}
+.risk-result{margin-top:20px}
+.risk-readout{display:flex; gap:26px; align-items:center; flex-wrap:wrap}
+.gauge{width:180px; height:180px; flex:none}
+.gauge-num{font-family:var(--sans); font-size:34px; font-weight:400; letter-spacing:-0.03em; fill:var(--paper)}
+.gauge-sub{font-family:var(--mono); font-size:10px; fill:var(--graphite); text-transform:uppercase}
+.risk-meta{flex:1; min-width:240px}
+.risk-cat{font-family:var(--mono); font-size:13px; font-weight:400; letter-spacing:0.06em;
+  text-transform:uppercase; margin-bottom:10px}
+.risk-stats{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:12px}
+.risk-stat{display:flex; flex-direction:column}
+.risk-stat span{font-family:var(--sans); font-size:22px; font-weight:400; letter-spacing:-0.02em}
+.risk-stat label{font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--graphite)}
+.risk-exp{font-size:14px; line-height:1.6; color:var(--lichen); margin:6px 0}
+.risk-factors{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+.risk-disc{margin-top:16px; font-family:var(--mono); font-size:11px; color:var(--graphite);
+  border-top:1px solid var(--hair); padding-top:12px; line-height:1.6}
+
+/* ── scrollbars ────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:10px; height:10px}
+::-webkit-scrollbar-thumb{background:var(--hair); border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ── responsive ────────────────────────────────────────────────── */
+@media (max-width:820px){
+  .grid2{grid-template-columns:1fr}
+  main,header{padding:20px}
+  .login-card h2{font-size:44px}
+}
